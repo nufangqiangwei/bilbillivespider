@@ -1,0 +1,1 @@
+2019/01/11  00:02:01签到成功{'code': 0, 'msg': 'OK', 'message': 'OK', 'data': {'text': '3000用户经验值,2辣条', 'specialText': '(再签到1天可以获得3天月费老爷)', 'allDays': 31, 'hadSignDays': 9, 'isBonusDay': 0}}
