@@ -86,7 +86,7 @@ class Worken(object):
         """
         上线的主播开启一个线程去记录，下线的主播发送退出消息
         消息格式 {房间id：True/False} True代表正在直播False代表以下播
-        :param room_list: 开播和下播的房间id [(id,kaiboshijian),[id]]
+        :param room_list: 开播的房间id [(id,kaiboshijian),[id]]
         :return:
         消息格式 {房间id：True/False} True代表正在直播False代表以下播
         :param room_list: 开播和下播的房间id [(id,kaiboshijian),[id]]
@@ -110,7 +110,7 @@ class Worken(object):
         try:
             for i in room_list[1]:
                 ti1 = time.strftime("%Y-%m-%d %H:%M:%S")
-                estr = '{}房间下播时间{}\n'.format(times[i], ti1)
+                estr = '{}房间下播时间{}\n'.format(i, ti1)
                 self.time_file.write(estr)
                 online[self.onlive[i]] = False  # i是房间的id self.onlive[i]取出up的名字 online[]是将检验退出的值改为false
         except Exception as e:
