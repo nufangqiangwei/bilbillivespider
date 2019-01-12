@@ -222,26 +222,6 @@ class BLiveClient:
 
         self.cli['{}'.format(self.coll_name)].insert_one(command)
 
-    async def _on_get_popularity(self, popularity):
-        """
-        获取到人气值
-        :param popularity: 人气值
-        """
-        # print("{}当前人气值{}".format(self.rm_id, popularity))
-        pass
-
-    async def _on_get_danmaku(self, content, user_name):
-        """
-        获取到弹幕
-        :param content: 弹幕内容
-        :param user_name: 弹幕作者
-        """
-        # print(user_name + "说" + content)
-        pass
-
-    async def _on_get_gift(self, gift, uname, mun):
-        pass
-
     def _on_stop(self, exc):
         """
         协程结束后被调用

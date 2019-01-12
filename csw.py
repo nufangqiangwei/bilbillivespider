@@ -1,17 +1,13 @@
-import time
+import pymongo
 
+cli = pymongo.MongoClient().bilbil
+collections = cli.list_collection_names()
 
-class ABC():
-    def __init__(self):
-        self.txt = open('wenjian.txt', 'w')
-
-    def woken(self):
-        for i in range(20):
-            time.sleep(1)
-            self.txt.write(str(i))
-            # self.txt.flush()
-
-
-
-a = ABC()
-a.woken()
+for co_name in collections:
+    if co_name == 'system.indexes':
+        continue
+    f = open('{}.json'.format(co_name), 'w')
+    for i in cli[co_name].find():
+        f.write(str(i))
+    f.close()
+    print('{}完成'.format(co_name))

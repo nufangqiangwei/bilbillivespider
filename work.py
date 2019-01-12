@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from asyncio import run_coroutine_threadsafe, new_event_loop, set_event_loop
 import sys
 import os
@@ -61,12 +62,11 @@ class Worken(object):
             return
         data = json.loads(response.text)
         if data['code'] == 0:
-            lida = self.line_or_noline(data)
-            self.shangxiaxian(lida)
+            self.shangxiaxian(self.line_or_noline(data))
         elif data['code'] == 401:
             self.send_mail("掉线了，请更新cookie")
         else:
-            sta = "不明原因请看消息" + str(data)
+            sta = "不明原因请看消息" + str(data)+'\n'
             self.file.write(sta)
             self.file.flush()
             self.send_mail(sta)
@@ -74,9 +74,16 @@ class Worken(object):
     def line_or_noline(self, data):
         interim_dict = {}
         time_dict = {}
-        for dit in data['data']['rooms']:
-            interim_dict[dit['room_id']] = dit['uname']
-            time_dict[dit['room_id']] = dit["live_time"]
+        try:
+
+            for dit in data['data']['rooms']:
+                interim_dict[dit['room_id']] = dit['uname']
+                time_dict[dit['room_id']] = dit["live_time"]
+        except Exception as e:
+            err = '提取在播主播时出错出错原因' + e + str(data)
+            self.file.write(err)
+            self.file.flush()
+
         shangxiand = interim_dict.keys() - self.onlive.keys()  # 上线的主播
         xiaxiand = self.onlive.keys() - interim_dict.keys()  # 下线的主播
         self.onlive = interim_dict
@@ -103,8 +110,10 @@ class Worken(object):
                 token = BLiveClient(i, self.onlive[i])
                 run_handel(token)
         except Exception as e:
+            self.file.write('开播时错误')
             self.file.write(str(e))
             self.file.write(str(room_list[0]))
+            self.file.write('\n')
             self.file.flush()
 
         try:
@@ -114,8 +123,10 @@ class Worken(object):
                 self.time_file.write(estr)
                 online[self.onlive[i]] = False  # i是房间的id self.onlive[i]取出up的名字 online[]是将检验退出的值改为false
         except Exception as e:
+            self.file.write('下播时出错')
             self.file.write(str(e))
-            self.file.write(str(room_list[1]))
+            self.file.write(str(room_list))
+            self.file.write('\n')
             self.file.flush()
 
         self.time_file.flush()
@@ -159,9 +170,8 @@ class Worken(object):
 
 def chakan(self):
     with open("online.txt", "a")as fi:
-        fi.write(str(online))
-        fi.write(str(self.onlive))
-        fi.write("\n")
+        fi.write(str(online)+'\n')
+        fi.write(str(self.onlive)+"\n")
 
 
 def chongqi():
@@ -189,8 +199,3 @@ if __name__ == '__main__':
 
     q = Worken()
     q.token()
-    # q.onlive[1314277] = 'yimeng'
-    # q.onlive[4092369] = 'luohan'
-    # q.shangxiaxian(({1314277, 4092369}, set(), {4092369: 4061, 1314277: 6048}))
-
-    # q.zhibolive()
